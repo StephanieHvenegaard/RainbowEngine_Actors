@@ -75,7 +75,6 @@ public abstract class Actor implements ICoreObject, IPlacable, IMoveable {
         this.rPlacement.setX(x);
         this.rCollisionBox.setX(x);
     }
-
     @Override
     public void setY(int y) {
         this.rPlacement.setY(y);
