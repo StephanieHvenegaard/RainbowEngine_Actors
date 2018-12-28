@@ -27,12 +27,13 @@
 package the_nights.players.graphics;
 
 import java.awt.image.BufferedImage;
+import the_nights.rainbow_engine.core.interfaces.ISprite;
 
 /**
  *
  * @author Stephanie
  */
-public class Sprite{
+public class Sprite implements ISprite{
     private final  int width;
     private final int height;
     private int[] pixels;
