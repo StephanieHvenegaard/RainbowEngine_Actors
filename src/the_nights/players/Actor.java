@@ -27,14 +27,16 @@ package the_nights.players;
 import the_nights.players.graphics.AnimatedSprite;
 import the_nights.players.graphics.Sprite;
 import the_nights.rainbow_engine.core.graphics.Rectangle;
+import the_nights.rainbow_engine.core.GameObject;
 import the_nights.rainbow_engine.core.interfaces.ICoreObject;
 import the_nights.rainbow_engine.core.interfaces.IMoveable;
 import the_nights.rainbow_engine.core.interfaces.IPlacable;
+import the_nights.rainbow_engine.core.interfaces.IScreenBuffer;
 /**
  *
  * @author Stephanie
  */
-public abstract class Actor implements ICoreObject, IPlacable, IMoveable {
+public abstract class Actor extends GameObject implements ICoreObject, IPlacable, IMoveable {
     protected final AnimatedSprite[] animTree;
     protected Sprite sprite;
     protected Rectangle rPlacement;
@@ -46,18 +48,21 @@ public abstract class Actor implements ICoreObject, IPlacable, IMoveable {
         this.animTree = animTree;
         this.sprite = animTree[0].getCurrentSprite();
         this.rPlacement = new Rectangle(0, 0, sprite.getWidth(), sprite.getHeight());
+        this.rCollisionBox = new Rectangle(0, 0, sprite.getWidth(), sprite.getHeight());
         this.speed = speed;
     }
     public Actor(Sprite sprite, int speed) {
         this.animTree = null;
         this.sprite = sprite;
         this.rPlacement = new Rectangle(0, 0, sprite.getWidth(), sprite.getHeight());
+        this.rCollisionBox = new Rectangle(0, 0, sprite.getWidth(), sprite.getHeight());
         this.speed = speed;
     }
     public Actor(Rectangle playerRec, int speed) {
         this.animTree = null;
         this.sprite = null;
         this.rPlacement = playerRec;
+        this.rCollisionBox = playerRec;
     }
     @Override
     public int getX() {
@@ -94,26 +99,31 @@ public abstract class Actor implements ICoreObject, IPlacable, IMoveable {
         this.rPlacement.setY(dyp);
         this.rCollisionBox.setY(dyc);
     }
-//
-//    @Override
-//    public boolean collidable() {
-//        return (rCollisionBox != null);
-//    }
-//
-//    @Override
-//    public boolean checkCollision(Rectangle rec) {
-//    return this.rCollisionBox.Overlap(rec);
-//    }
-//
-//    @Override
-//    public void setCollisionBox(Rectangle rec) {
-//        this.rCollisionBox = rec;
-//        //this.rCollisionBox.generateBorderGrafics();
-//    }
-//
-//    @Override
-//    public void setCollisionBox(int width, int height) {
-//        Rectangle rec = new Rectangle(rPlacement.getX(), rPlacement.getY(), width, height);
-//        setCollisionBox(rec);
-//    }
+    @Override
+    public void render(IScreenBuffer screenBuffer, int xZoom, int yZoom) {
+        if (animTree != null) {
+            screenBuffer.renderSprite(animTree[activeAnimTree].getCurrentSprite(), rPlacement.getX(), rPlacement.getY(), xZoom, yZoom, false);
+        } else if (sprite != null) {
+            screenBuffer.renderSprite(sprite, rPlacement.getX(), rPlacement.getY(), xZoom, yZoom, false);
+        } else {
+            screenBuffer.renderRectangle(rPlacement, xZoom, yZoom, false);
+        }               
+    }
+    public boolean collidable() {
+        return (rCollisionBox != null);
+    }
+
+    public boolean checkCollision(Rectangle rec) {
+    return this.rCollisionBox.Overlap(rec);
+    }
+
+    public void setCollisionBox(Rectangle rec) {
+        this.rCollisionBox = rec;
+        //this.rCollisionBox.generateBorderGrafics();
+    }
+
+    public void setCollisionBox(int width, int height) {
+        Rectangle rec = new Rectangle(rPlacement.getX(), rPlacement.getY(), width, height);
+        setCollisionBox(rec);
+    }
 }
