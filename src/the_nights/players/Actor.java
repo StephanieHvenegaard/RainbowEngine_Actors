@@ -100,7 +100,7 @@ public abstract class Actor extends GameObject implements ICoreObject, IPlacable
         this.rCollisionBox.setY(dyc);
     }
     @Override
-    public void render(IScreenBuffer screenBuffer, int xZoom, int yZoom) {
+    public void render(IScreenBuffer screenBuffer) {
         if (animTree != null) {
             screenBuffer.renderSprite(animTree[activeAnimTree].getCurrentSprite(), rPlacement.getX(), rPlacement.getY());
         } else if (sprite != null) {
