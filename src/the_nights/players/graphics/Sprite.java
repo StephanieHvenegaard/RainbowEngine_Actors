@@ -24,6 +24,7 @@
 package the_nights.players.graphics;
 
 import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferInt;
 import the_nights.rainbow_engine.core.interfaces.ISprite;
 
 /**
@@ -39,8 +40,9 @@ public class Sprite implements ISprite{
     {
         this.height = height;
         this.width = width;
-        this.pixels = new int[height*width];
-        sheet.getSheet().getRGB(startX, startY, width, height, pixels, 0,width);
+        this.pixels = ((DataBufferInt) sheet.getSheet().getRaster().getDataBuffer()).getData();
+//                = new int[height*width];
+//        sheet.getSheet().getRGB(startX, startY, width, height, pixels, 0,width);
     }
     public Sprite(int size, int[] pixels)
     {
@@ -50,10 +52,11 @@ public class Sprite implements ISprite{
     }
     public Sprite(BufferedImage sprite)
     {
-        width = sprite.getWidth();
-        height = sprite.getHeight();
-        this.pixels = new int[width*height];
-        sprite.getRGB(0,0,width,height,pixels,0,width);
+        this.width = sprite.getWidth();
+        this.height = sprite.getHeight();
+        this.pixels = ((DataBufferInt) sprite.getRaster().getDataBuffer()).getData();
+//      isb.renderPixels(imagePixels, 0,0, uibg.getWidth(), uibg.getHeight());
+//      sprite.getRGB(0,0,width,height,pixels,0,width);
     }
     public Sprite()
     {
@@ -61,6 +64,7 @@ public class Sprite implements ISprite{
         this.width =-1;
         this.pixels = null;
     }
+    
     public int[] getPixels() {
         return pixels;
     } 
@@ -71,6 +75,5 @@ public class Sprite implements ISprite{
 
     public int getHeight() {
         return height;
-    }
-    
+    }    
 }

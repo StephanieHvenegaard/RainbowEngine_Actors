@@ -109,6 +109,7 @@ public abstract class Actor extends GameObject implements ICoreObject, IPlacable
             screenBuffer.renderRectangle(rPlacement);
         }               
     }
+    
     public boolean collidable() {
         return (rCollisionBox != null);
     }

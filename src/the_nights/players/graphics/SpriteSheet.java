@@ -25,6 +25,7 @@ package the_nights.players.graphics;
 
 import the_nights.players.graphics.Sprite;
 import java.awt.image.BufferedImage;
+import java.awt.image.DataBuffer;
 
 /**
  *
@@ -54,7 +55,7 @@ public class SpriteSheet {
                 int[] spritePix = new int[spriteSize * spriteSize];
                 int spriteWidth = spriteSize;
                 int spriteHeight = spriteSize;
-                spritePix = sheet.getRGB(x, y, spriteWidth, spriteHeight, spritePix, 0, spriteWidth);
+                spritePix = getSpritePixels(x, y, spriteWidth, spriteHeight, spritePix, 0, spriteWidth);
                 Sprite s = new Sprite(spriteSize, spritePix);
                 sprites[spriteID] = s;
                 spriteID++;
@@ -85,8 +86,8 @@ public class SpriteSheet {
         //System.out.println("fetching sprite x:"+x +" y:"+y+ " with id:"+id);
         return getSprite(id);
     }
-    public Sprite[] getSprites(int row)
-    {
+    
+    public Sprite[] getSprites(int row) {
         Sprite[] returnedSprites = new Sprite[(WIDTH / SPRITE_SIZE)];        
         for(int i =0; i < returnedSprites.length; i++)
         {
@@ -94,4 +95,23 @@ public class SpriteSheet {
         }
         return returnedSprites;
     }
+    
+     public int[] getSpritePixels(int startX, int startY, int w, int h,
+                        int[] rgbArray, int offset, int scansize) {
+        int yoff  = offset;
+        int off;       
+        if (rgbArray == null) {
+            rgbArray = new int[offset+h*scansize];
+        }
+
+        for (int y = startY; y < startY+h; y++, yoff+=scansize) {
+            off = yoff;
+            for (int x = startX; x < startX+w; x++) {
+                rgbArray[off++] = pixels[x+y];
+            }
+        }
+
+        return rgbArray;
+    }
+    
 }
